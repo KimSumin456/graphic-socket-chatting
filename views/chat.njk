@@ -1,0 +1,36 @@
+{% extends 'layout.njk' %}
+
+{% block content %}
+<h1>{{title}}</h1>
+
+<p style="color: {{color}}">{{color}}</p>
+
+<form id="chat-form">
+    <input type="text" id="chat">
+    <button type="submit">전송</button>
+</form>
+{% endblock %}
+
+{% block script %}
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    const socket = io.connect('http://localhost:3000/chat', {
+        path: '/socket.io',
+    });
+
+    document.querySelector("#chat-form").addEventListener('submit', (e) => {
+        e.preventDefault();
+        if (e.target.chat.value) {
+            socket.emit('chat', {
+                user: socket.id,
+                chat: e.target.chat.value
+            });
+        }
+        e.target.chat.value = '';
+    });
+
+    socket.on('chat', (data) => {
+        console.log(data);
+    });
+</script>
+{% endblock %}
