@@ -1,8 +1,10 @@
 const express = require('express');
-const { renderChat } = require('../controllers');
+const { renderMain, renderChat } = require('../controllers');
 
 const router = express.Router();
 
-router.get('/chat', renderChat);
+router.get('/main', renderMain);
+
+router.post('/chat', renderChat);
 
 module.exports = router;

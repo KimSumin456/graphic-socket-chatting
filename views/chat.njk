@@ -1,9 +1,17 @@
 {% extends 'layout.njk' %}
 
+{% block style %}
+<link rel="stylesheet" href="/style/chat.css">
+{% endblock %}
+
 {% block content %}
 <h1>{{title}}</h1>
 
-<p style="color: {{color}}">{{color}}</p>
+<canvas id="chat-canvas"></canvas>
+
+<p style="color: {{color}}">{{user}}</p>
+
+</div>
 
 <form id="chat-form">
     <input type="text" id="chat">
@@ -13,7 +21,26 @@
 
 {% block script %}
 <script src="/socket.io/socket.io.js"></script>
-<script>
+<script type="module">
+    const canvas = document.querySelector("#chat-canvas");
+    const context = canvas.getContext("2d");
+    
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let backgroundImgX = 0, backgroundImgY = 0;
+    const backgroundImg = new Image();
+    backgroundImg.onload = () => {
+        context.drawImage(backgroundImg, 0, 0, 1000, 1400);
+    };
+    backgroundImg.src = "asset/yard.svg";
+
+    const meImg = new Image();
+    meImg.onload = () => {
+        context.drawImage(meImg, canvas.width/2 - 40, canvas.height/2 - 40, 80, 80);
+    };
+    meImg.src = "asset/chtor.svg";
+
     const socket = io.connect('http://localhost:3000/chat', {
         path: '/socket.io',
     });
@@ -30,6 +57,7 @@
     });
 
     socket.on('chat', (data) => {
+        context.fillRect(canvas.width / 2 - 50, canvas.height / 2 - 50, 100, 30); // temporary speech bubble
         console.log(data);
     });
 </script>
