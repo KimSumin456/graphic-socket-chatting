@@ -52,12 +52,16 @@
                 user: socket.id,
                 chat: e.target.chat.value
             });
+            context.fillStyle = "white";
+            context.fillRect(canvas.width / 2 - 50, canvas.height / 2 - 50, 100, 30); // temporary speech bubble
+            context.fillStyle = "black";
+            context.font = "20px Arial";
+            context.fillText(e.target.chat.value, canvas.width / 2 - 40, canvas.height / 2 - 25);
         }
         e.target.chat.value = '';
     });
 
     socket.on('chat', (data) => {
-        context.fillRect(canvas.width / 2 - 50, canvas.height / 2 - 50, 100, 30); // temporary speech bubble
         console.log(data);
     });
 </script>
